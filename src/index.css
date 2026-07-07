@@ -1,0 +1,253 @@
+@import "tailwindcss";
+
+/* ========================================
+   DESIGN SYSTEM — Portal Desa Salamrejo
+   Nature-Inspired Elegance
+   ======================================== */
+
+@theme {
+  /* Primary: Hijau Sawah (Leaf Green) */
+  --color-leaf-50: #f0fdf4;
+  --color-leaf-100: #dcfce7;
+  --color-leaf-200: #bbf7d0;
+  --color-leaf-300: #86efac;
+  --color-leaf-400: #4ade80;
+  --color-leaf-500: #22c55e;
+  --color-leaf-600: #16a34a;
+  --color-leaf-700: #15803d;
+  --color-leaf-800: #166534;
+  --color-leaf-900: #14532d;
+  --color-leaf-950: #052e16;
+
+  /* Accent: Tanah Coklat (Wood Brown) */
+  --color-wood-50: #fdf8f0;
+  --color-wood-100: #f5eed9;
+  --color-wood-200: #e8ddd0;
+  --color-wood-300: #d4c5ae;
+  --color-wood-400: #b8a078;
+  --color-wood-500: #9a7e55;
+  --color-wood-600: #7a5f3a;
+  --color-wood-700: #5e472a;
+  --color-wood-800: #46351f;
+  --color-wood-900: #322618;
+
+  /* Neutral: Warm Backgrounds */
+  --color-warm-50: #faf9f6;
+  --color-warm-100: #f4f2ed;
+  --color-warm-200: #eae7e0;
+  --color-warm-300: #d6d2c9;
+
+  /* Font */
+  --font-sans: 'Poppins', system-ui, -apple-system, sans-serif;
+}
+
+/* ========================================
+   BASE STYLES
+   ======================================== */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-warm-50);
+  color: #374151;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ========================================
+   SCROLLBAR STYLING
+   ======================================== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-warm-100);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-leaf-300);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-leaf-500);
+}
+
+/* ========================================
+   ANIMATIONS
+   ======================================== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: scale(0.5); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.7s ease-out both;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out both;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.6s ease-out both;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.5s ease-out both;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-count-up {
+  animation: countUp 0.6s ease-out both;
+}
+
+/* Delay utilities */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+.delay-600 { animation-delay: 600ms; }
+.delay-700 { animation-delay: 700ms; }
+
+/* ========================================
+   SKELETON LOADING
+   ======================================== */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-warm-200) 25%,
+    var(--color-warm-100) 50%,
+    var(--color-warm-200) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 8px;
+}
+
+/* ========================================
+   GLASS MORPHISM UTILITY
+   ======================================== */
+.glass {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.glass-dark {
+  background: rgba(5, 46, 22, 0.6);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* ========================================
+   HERO OVERLAY GRADIENT
+   ======================================== */
+.hero-overlay {
+  background: linear-gradient(
+    135deg,
+    rgba(5, 46, 22, 0.85) 0%,
+    rgba(20, 83, 45, 0.7) 40%,
+    rgba(22, 101, 52, 0.5) 70%,
+    rgba(22, 163, 74, 0.3) 100%
+  );
+}
+
+.hero-overlay-pedukuhan {
+  background: linear-gradient(
+    180deg,
+    rgba(5, 46, 22, 0.3) 0%,
+    rgba(5, 46, 22, 0.6) 50%,
+    rgba(5, 46, 22, 0.9) 100%
+  );
+}
+
+/* ========================================
+   SECTION PATTERN BACKGROUND
+   ======================================== */
+.pattern-dots {
+  background-image: radial-gradient(
+    circle,
+    var(--color-leaf-200) 1px,
+    transparent 1px
+  );
+  background-size: 20px 20px;
+}
+
+/* ========================================
+   CUSTOM UTILITIES
+   ======================================== */
+.text-balance {
+  text-wrap: balance;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
