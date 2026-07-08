@@ -85,8 +85,8 @@ export const pedukuhanList = [
 export const pedukuhanData = {
   klebakan: {
     hero_foto: null,
-    dukuh: { nama: "Bapak/Ibu Dukuh Klebakan", wa: "", peta_url: "" },
-    statistik: { jml_rt: 5, jml_kk: 150, laki_laki: 320, perempuan: 310 },
+    dukuh: { nama: "Bapak Mujiran", wa: "+62 815 7577 1228", peta_url: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7904.957523159129!2d110.21592165934038!3d-7.844855468575608!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7afbcd2eb7a81f%3A0x74923160451be22a!2sKlebakan%2C%20Salamrejo%2C%20Kec.%20Sentolo%2C%20Kabupaten%20Kulon%20Progo%2C%20Daerah%20Istimewa%20Yogyakarta!5e0!3m2!1sid!2sid!4v1783502181514!5m2!1sid!2sid" },
+    statistik: { jml_rt: 8, jml_kk: 369, laki_laki: 597, perempuan: 614 },
     umkm: [
       {
         nama: "Kerajinan Serat Agel",
