@@ -1,7 +1,72 @@
 import { useInView } from '../../hooks/useInView';
 
+/**
+ * Konversi URL Google Maps biasa menjadi URL embed.
+ * Mendukung format:
+ * - https://www.google.com/maps/place/... → embed/v1/place
+ * - https://maps.google.com/... → embed/v1/place
+ * - https://www.google.com/maps/embed?... → langsung dipakai
+ * - https://www.google.com/maps/@lat,lng,zoom → embed/v1/view
+ */
+function getEmbedUrl(url) {
+  if (!url) return null;
+
+  // Jika sudah berformat embed, langsung pakai
+  if (url.includes('/maps/embed')) return url;
+
+  // Jika format /maps/place/NamaLokasi/...
+  const placeMatch = url.match(/\/maps\/place\/([^/@]+)/);
+  if (placeMatch) {
+    const placeName = decodeURIComponent(placeMatch[1].replace(/\+/g, ' '));
+    return `https://www.google.com/maps/embed/v1/place?key=&q=${encodeURIComponent(placeName)}`;
+  }
+
+  // Jika format /maps/@lat,lng,zoom
+  const coordMatch = url.match(/\/@(-?\d+\.?\d*),(-?\d+\.?\d*),(\d+\.?\d*)/);
+  if (coordMatch) {
+    return `https://www.google.com/maps/embed/v1/view?key=&center=${coordMatch[1]},${coordMatch[2]}&zoom=${parseInt(coordMatch[3])}`;
+  }
+
+  return null;
+}
+
+/**
+ * Ekstrak koordinat dari URL Google Maps untuk membuat embed sederhana.
+ */
+function getSimpleEmbedUrl(url) {
+  if (!url) return null;
+
+  // Jika sudah berformat embed, langsung pakai
+  if (url.includes('/maps/embed')) return url;
+
+  // Coba extract place name
+  const placeMatch = url.match(/\/maps\/place\/([^/@]+)/);
+  if (placeMatch) {
+    const placeName = placeMatch[1].replace(/\+/g, ' ');
+    // Gunakan maps embed tanpa API key (q parameter)
+    return `https://maps.google.com/maps?q=${encodeURIComponent(placeName)}&output=embed`;
+  }
+
+  // Coba extract koordinat
+  const coordMatch = url.match(/\/@(-?\d+\.?\d*),(-?\d+\.?\d*)/);
+  if (coordMatch) {
+    return `https://maps.google.com/maps?q=${coordMatch[1]},${coordMatch[2]}&output=embed`;
+  }
+
+  // Fallback: coba extract dari data=!...!3d...!4d...
+  const dataMatch = url.match(/!3d(-?\d+\.?\d*)!4d(-?\d+\.?\d*)/);
+  if (dataMatch) {
+    return `https://maps.google.com/maps?q=${dataMatch[1]},${dataMatch[2]}&output=embed`;
+  }
+
+  return null;
+}
+
 export default function PedukuhanMapContact({ dukuh, pedukuhanNama }) {
   const [ref, isInView] = useInView({ threshold: 0.1 });
+
+  // Konversi peta_url ke embed URL
+  const embedUrl = dukuh?.peta_url ? getSimpleEmbedUrl(dukuh.peta_url) : null;
 
   return (
     <section id="pedukuhan-map-contact" className="py-16 sm:py-20 bg-warm-100">
@@ -29,15 +94,38 @@ export default function PedukuhanMapContact({ dukuh, pedukuhanNama }) {
               </h3>
             </div>
             <div className="h-72 sm:h-80 bg-gradient-to-br from-leaf-50 to-leaf-100 relative">
-              {dukuh?.peta_url ? (
+              {embedUrl ? (
                 <iframe
-                  src={dukuh.peta_url}
+                  src={embedUrl}
                   className="w-full h-full border-0"
                   allowFullScreen=""
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                   title={`Peta Pedukuhan ${pedukuhanNama}`}
                 />
+              ) : dukuh?.peta_url ? (
+                /* URL tersedia tapi tidak bisa di-embed — tampilkan tombol link */
+                <div className="w-full h-full flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="w-16 h-16 mx-auto mb-3 rounded-2xl bg-leaf-100 flex items-center justify-center">
+                      <svg className="w-8 h-8 text-leaf-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
+                      </svg>
+                    </div>
+                    <p className="text-sm text-gray-500 mb-3">Peta tersedia di Google Maps</p>
+                    <a
+                      href={dukuh.peta_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-leaf-600 text-white text-sm font-medium hover:bg-leaf-500 transition-colors"
+                    >
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                      Buka di Google Maps
+                    </a>
+                  </div>
+                </div>
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
                   <div className="text-center">

@@ -1,20 +1,36 @@
 import { Link } from 'react-router-dom';
 
 export default function PedukuhanHero({ pedukuhan, data }) {
+  const heroFoto = data?.hero_foto;
+
   return (
     <section id="pedukuhan-hero" className="relative min-h-[60vh] sm:min-h-[70vh] flex items-end overflow-hidden">
-      {/* Background */}
-      <div className={`absolute inset-0 bg-gradient-to-br ${pedukuhan.warna}`} />
+      {/* Background — image or gradient */}
+      {heroFoto ? (
+        <>
+          <img
+            src={heroFoto}
+            alt={`Pedukuhan ${pedukuhan.nama}`}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          {/* Dark overlay for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
+        </>
+      ) : (
+        <>
+          <div className={`absolute inset-0 bg-gradient-to-br ${pedukuhan.warna}`} />
 
-      {/* Animated bg patterns */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-1/4 right-1/4 w-64 h-64 rounded-full bg-white blur-3xl animate-float" />
-        <div className="absolute bottom-1/3 left-1/3 w-48 h-48 rounded-full bg-white blur-2xl animate-float delay-500" />
-      </div>
-      <div className="absolute inset-0 pattern-dots opacity-5" />
+          {/* Animated bg patterns */}
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-1/4 right-1/4 w-64 h-64 rounded-full bg-white blur-3xl animate-float" />
+            <div className="absolute bottom-1/3 left-1/3 w-48 h-48 rounded-full bg-white blur-2xl animate-float delay-500" />
+          </div>
+          <div className="absolute inset-0 pattern-dots opacity-5" />
 
-      {/* Overlay */}
-      <div className="absolute inset-0 hero-overlay-pedukuhan" />
+          {/* Overlay */}
+          <div className="absolute inset-0 hero-overlay-pedukuhan" />
+        </>
+      )}
 
       {/* Content */}
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 w-full">

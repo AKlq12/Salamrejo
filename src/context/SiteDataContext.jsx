@@ -19,14 +19,6 @@ export function SiteDataProvider({ children }) {
     const loadAllData = async () => {
       setLoading(true);
       try {
-        // Cek apakah API URL masih dummy
-        const { SHEETDB_API_URL } = await import('../data/apiConfig');
-        if (SHEETDB_API_URL === "ISI_DENGAN_URL_API_SHEETDB_KAMU_NANTI") {
-          setIsUsingFallback(true);
-          setLoading(false);
-          return;
-        }
-
         // Fetch semua sheet secara paralel agar lebih cepat
         const [infoRes, statistikRes, umkmRes, galeriRes] = await Promise.all([
           fetchSheetData('Pedukuhan_Info'),
@@ -35,17 +27,24 @@ export function SiteDataProvider({ children }) {
           fetchSheetData('Galeri')
         ]);
 
-        setData({
-          info: infoRes || [],
-          statistik: statistikRes || [],
-          umkm: umkmRes || [],
-          galeri: galeriRes || []
-        });
-        setIsUsingFallback(false);
+        // Cek apakah data berhasil diambil (minimal info harus ada)
+        if (infoRes.length > 0) {
+          setData({
+            info: infoRes,
+            statistik: statistikRes,
+            umkm: umkmRes,
+            galeri: galeriRes
+          });
+          setIsUsingFallback(false);
+        } else {
+          // Jika semua kosong, gunakan fallback
+          console.warn("Data dari Google Sheets kosong, menggunakan data statis.");
+          setIsUsingFallback(true);
+        }
       } catch (err) {
-        console.error("Gagal memuat data dari API:", err);
+        console.error("Gagal memuat data dari Google Sheets:", err);
         setError(err.message);
-        setIsUsingFallback(true); // Gunakan data statis jika API gagal (misal kuota habis)
+        setIsUsingFallback(true); // Gunakan data statis jika fetch gagal
       } finally {
         setLoading(false);
       }
@@ -63,7 +62,7 @@ export function SiteDataProvider({ children }) {
     // Cari info dukuh
     const infoDukuh = data.info.find(item => item.ID_Pedukuhan === id) || {};
     
-    // Cari statistik (konversi string angka dari GSheets menjadi Number)
+    // Cari statistik (konversi string angka dari CSV menjadi Number)
     const rawStat = data.statistik.find(item => item.ID_Pedukuhan === id) || {};
     const statistik = {
       jml_rt: Number(rawStat.Jml_RT) || 0,
@@ -77,14 +76,15 @@ export function SiteDataProvider({ children }) {
       nama: item.Nama_Usaha,
       kategori: item.Kategori,
       deskripsi: item.Deskripsi,
-      foto: item.Foto,
-      wa: item.WA
+      foto: item.Foto || null,
+      wa: item.WA,
+      lokasi: item.Lokasi
     }));
 
     const galeri = data.galeri.filter(item => item.ID_Pedukuhan === id).map(item => ({
       judul: item.Judul,
       kategori: item.Kategori,
-      foto: item.Foto_URL,
+      foto: item.Foto_URL || null,
       deskripsi: item.Deskripsi
     }));
 
@@ -94,7 +94,7 @@ export function SiteDataProvider({ children }) {
         wa: infoDukuh.WA_Dukuh,
         peta_url: infoDukuh.Peta_URL
       },
-      hero_foto: infoDukuh.Foto_Hero,
+      hero_foto: infoDukuh.Foto_Hero || null,
       statistik,
       umkm,
       galeri

@@ -94,6 +94,7 @@ export const pedukuhanData = {
         deskripsi: "Produk kerajinan tangan dari serat agel berkualitas tinggi yang menjadi ikon Klebakan.",
         foto: null,
         wa: "",
+        lokasi: "",
       },
       {
         nama: "Olahan Pangan Lokal",
@@ -101,6 +102,7 @@ export const pedukuhanData = {
         deskripsi: "Berbagai olahan pangan dari bahan lokal yang memiliki cita rasa khas desa.",
         foto: null,
         wa: "",
+        lokasi: "",
       },
       {
         nama: "Pertanian Padi Organik",
@@ -108,6 +110,7 @@ export const pedukuhanData = {
         deskripsi: "Padi organik yang dibudidayakan secara tradisional oleh petani setempat.",
         foto: null,
         wa: "",
+        lokasi: "",
       },
     ],
     galeri: [
@@ -121,9 +124,9 @@ export const pedukuhanData = {
     dukuh: { nama: "Bapak/Ibu Dukuh Mentobayan Kidul", wa: "", peta_url: "" },
     statistik: { jml_rt: 4, jml_kk: 120, laki_laki: 260, perempuan: 250 },
     umkm: [
-      { nama: "Batik Tulis Mentobayan", kategori: "Kerajinan", deskripsi: "Batik tulis dengan motif khas Mentobayan Kidul.", foto: null, wa: "" },
-      { nama: "Emping Melinjo", kategori: "Makanan", deskripsi: "Emping melinjo renyah buatan tangan ibu-ibu setempat.", foto: null, wa: "" },
-      { nama: "Pupuk Organik", kategori: "Pertanian", deskripsi: "Pupuk organik dari limbah ternak untuk pertanian berkelanjutan.", foto: null, wa: "" },
+      { nama: "Batik Tulis Mentobayan", kategori: "Kerajinan", deskripsi: "Batik tulis dengan motif khas Mentobayan Kidul.", foto: null, wa: "", lokasi: "" },
+      { nama: "Emping Melinjo", kategori: "Makanan", deskripsi: "Emping melinjo renyah buatan tangan ibu-ibu setempat.", foto: null, wa: "", lokasi: "" },
+      { nama: "Pupuk Organik", kategori: "Pertanian", deskripsi: "Pupuk organik dari limbah ternak untuk pertanian berkelanjutan.", foto: null, wa: "", lokasi: "" },
     ],
     galeri: [
       { judul: "Nyadran Mentobayan", kategori: "Budaya", foto: null, deskripsi: "Tradisi nyadran yang digelar setiap tahun oleh warga." },
@@ -136,9 +139,9 @@ export const pedukuhanData = {
     dukuh: { nama: "Bapak/Ibu Dukuh Giyoso", wa: "", peta_url: "" },
     statistik: { jml_rt: 4, jml_kk: 110, laki_laki: 240, perempuan: 230 },
     umkm: [
-      { nama: "Gula Kelapa", kategori: "Makanan", deskripsi: "Gula kelapa alami dari pohon kelapa tua pedukuhan.", foto: null, wa: "" },
-      { nama: "Anyaman Bambu", kategori: "Kerajinan", deskripsi: "Aneka produk anyaman bambu untuk keperluan rumah tangga.", foto: null, wa: "" },
-      { nama: "Ternak Kambing", kategori: "Pertanian", deskripsi: "Peternakan kambing sehat dengan pakan alami.", foto: null, wa: "" },
+      { nama: "Gula Kelapa", kategori: "Makanan", deskripsi: "Gula kelapa alami dari pohon kelapa tua pedukuhan.", foto: null, wa: "", lokasi: "" },
+      { nama: "Anyaman Bambu", kategori: "Kerajinan", deskripsi: "Aneka produk anyaman bambu untuk keperluan rumah tangga.", foto: null, wa: "", lokasi: "" },
+      { nama: "Ternak Kambing", kategori: "Pertanian", deskripsi: "Peternakan kambing sehat dengan pakan alami.", foto: null, wa: "", lokasi: "" },
     ],
     galeri: [
       { judul: "Jalan Desa Giyoso", kategori: "Alam", foto: null, deskripsi: "Jalan desa yang asri dikelilingi pepohonan rindang." },
@@ -151,9 +154,9 @@ export const pedukuhanData = {
     dukuh: { nama: "Bapak/Ibu Dukuh Karang Wetan", wa: "", peta_url: "" },
     statistik: { jml_rt: 5, jml_kk: 140, laki_laki: 300, perempuan: 290 },
     umkm: [
-      { nama: "Keripik Singkong", kategori: "Makanan", deskripsi: "Keripik singkong aneka rasa yang renyah dan gurih.", foto: null, wa: "" },
-      { nama: "Tas Rajut", kategori: "Kerajinan", deskripsi: "Tas rajut handmade dari bahan berkualitas.", foto: null, wa: "" },
-      { nama: "Budidaya Lele", kategori: "Pertanian", deskripsi: "Budidaya ikan lele dengan sistem biofloc.", foto: null, wa: "" },
+      { nama: "Keripik Singkong", kategori: "Makanan", deskripsi: "Keripik singkong aneka rasa yang renyah dan gurih.", foto: null, wa: "", lokasi: "" },
+      { nama: "Tas Rajut", kategori: "Kerajinan", deskripsi: "Tas rajut handmade dari bahan berkualitas.", foto: null, wa: "", lokasi: "" },
+      { nama: "Budidaya Lele", kategori: "Pertanian", deskripsi: "Budidaya ikan lele dengan sistem biofloc.", foto: null, wa: "", lokasi: "" },
     ],
     galeri: [
       { judul: "Karang Taruna", kategori: "Kegiatan", foto: null, deskripsi: "Kegiatan pemuda karang taruna Karang Wetan." },
@@ -166,9 +169,9 @@ export const pedukuhanData = {
     dukuh: { nama: "Bapak/Ibu Dukuh Kidulan", wa: "", peta_url: "" },
     statistik: { jml_rt: 3, jml_kk: 100, laki_laki: 210, perempuan: 200 },
     umkm: [
-      { nama: "Jamu Tradisional", kategori: "Makanan", deskripsi: "Jamu tradisional dari rempah-rempah pilihan.", foto: null, wa: "" },
-      { nama: "Batu Bata", kategori: "Kerajinan", deskripsi: "Produksi batu bata merah berkualitas tinggi.", foto: null, wa: "" },
-      { nama: "Sayuran Organik", kategori: "Pertanian", deskripsi: "Sayuran organik segar langsung dari kebun warga.", foto: null, wa: "" },
+      { nama: "Jamu Tradisional", kategori: "Makanan", deskripsi: "Jamu tradisional dari rempah-rempah pilihan.", foto: null, wa: "", lokasi: "" },
+      { nama: "Batu Bata", kategori: "Kerajinan", deskripsi: "Produksi batu bata merah berkualitas tinggi.", foto: null, wa: "", lokasi: "" },
+      { nama: "Sayuran Organik", kategori: "Pertanian", deskripsi: "Sayuran organik segar langsung dari kebun warga.", foto: null, wa: "", lokasi: "" },
     ],
     galeri: [
       { judul: "Gamelan Kidulan", kategori: "Budaya", foto: null, deskripsi: "Latihan gamelan oleh kelompok kesenian pedukuhan." },
@@ -181,9 +184,9 @@ export const pedukuhanData = {
     dukuh: { nama: "Bapak/Ibu Dukuh Dhisil", wa: "", peta_url: "" },
     statistik: { jml_rt: 4, jml_kk: 130, laki_laki: 280, perempuan: 270 },
     umkm: [
-      { nama: "Tempe Kedelai", kategori: "Makanan", deskripsi: "Tempe kedelai segar produksi rumahan yang diminati banyak orang.", foto: null, wa: "" },
-      { nama: "Gerabah Tradisional", kategori: "Kerajinan", deskripsi: "Gerabah tradisional untuk dekorasi dan peralatan dapur.", foto: null, wa: "" },
-      { nama: "Palawija", kategori: "Pertanian", deskripsi: "Budidaya palawija berkualitas dengan sistem tradisional.", foto: null, wa: "" },
+      { nama: "Tempe Kedelai", kategori: "Makanan", deskripsi: "Tempe kedelai segar produksi rumahan yang diminati banyak orang.", foto: null, wa: "", lokasi: "" },
+      { nama: "Gerabah Tradisional", kategori: "Kerajinan", deskripsi: "Gerabah tradisional untuk dekorasi dan peralatan dapur.", foto: null, wa: "", lokasi: "" },
+      { nama: "Palawija", kategori: "Pertanian", deskripsi: "Budidaya palawija berkualitas dengan sistem tradisional.", foto: null, wa: "", lokasi: "" },
     ],
     galeri: [
       { judul: "Wayang Kulit", kategori: "Budaya", foto: null, deskripsi: "Pertunjukan wayang kulit dalam rangka bersih desa." },
@@ -196,9 +199,9 @@ export const pedukuhanData = {
     dukuh: { nama: "Bapak/Ibu Dukuh Salam", wa: "", peta_url: "" },
     statistik: { jml_rt: 6, jml_kk: 160, laki_laki: 340, perempuan: 330 },
     umkm: [
-      { nama: "Kue Tradisional", kategori: "Makanan", deskripsi: "Aneka kue tradisional Jawa untuk acara dan oleh-oleh.", foto: null, wa: "" },
-      { nama: "Mebel Kayu Jati", kategori: "Kerajinan", deskripsi: "Furnitur kayu jati dengan desain klasik dan modern.", foto: null, wa: "" },
-      { nama: "Bibit Tanaman", kategori: "Pertanian", deskripsi: "Penyedia bibit tanaman buah dan hias berkualitas.", foto: null, wa: "" },
+      { nama: "Kue Tradisional", kategori: "Makanan", deskripsi: "Aneka kue tradisional Jawa untuk acara dan oleh-oleh.", foto: null, wa: "", lokasi: "" },
+      { nama: "Mebel Kayu Jati", kategori: "Kerajinan", deskripsi: "Furnitur kayu jati dengan desain klasik dan modern.", foto: null, wa: "", lokasi: "" },
+      { nama: "Bibit Tanaman", kategori: "Pertanian", deskripsi: "Penyedia bibit tanaman buah dan hias berkualitas.", foto: null, wa: "", lokasi: "" },
     ],
     galeri: [
       { judul: "Grebeg Salam", kategori: "Budaya", foto: null, deskripsi: "Festival tahunan yang menjadi ikon pedukuhan Salam." },
@@ -211,9 +214,9 @@ export const pedukuhanData = {
     dukuh: { nama: "Bapak/Ibu Dukuh Ngandu", wa: "", peta_url: "" },
     statistik: { jml_rt: 4, jml_kk: 115, laki_laki: 250, perempuan: 240 },
     umkm: [
-      { nama: "Susu Sapi Segar", kategori: "Makanan", deskripsi: "Susu sapi segar dari peternakan lokal pedukuhan.", foto: null, wa: "" },
-      { nama: "Tikar Pandan", kategori: "Kerajinan", deskripsi: "Tikar pandan anyaman tangan dengan motif tradisional.", foto: null, wa: "" },
-      { nama: "Ternak Sapi", kategori: "Pertanian", deskripsi: "Peternakan sapi dengan manajemen modern dan pakan ternak lokal.", foto: null, wa: "" },
+      { nama: "Susu Sapi Segar", kategori: "Makanan", deskripsi: "Susu sapi segar dari peternakan lokal pedukuhan.", foto: null, wa: "", lokasi: "" },
+      { nama: "Tikar Pandan", kategori: "Kerajinan", deskripsi: "Tikar pandan anyaman tangan dengan motif tradisional.", foto: null, wa: "", lokasi: "" },
+      { nama: "Ternak Sapi", kategori: "Pertanian", deskripsi: "Peternakan sapi dengan manajemen modern dan pakan ternak lokal.", foto: null, wa: "", lokasi: "" },
     ],
     galeri: [
       { judul: "Padang Rumput Ngandu", kategori: "Alam", foto: null, deskripsi: "Padang rumput hijau tempat ternak merumput." },
