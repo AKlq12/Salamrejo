@@ -1,35 +1,30 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useParams, Navigate, Link } from 'react-router-dom';
 import { getSession, hasAccessToDusun } from './adminAuth';
-import { pedukuhanList, pedukuhanData } from '../data/siteData';
-
-const STORAGE_KEY = 'salamrejo_admin_data';
-
-function loadLocalData() {
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
-  } catch { return {}; }
-}
-
-function saveLocalData(data) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-}
+import { pedukuhanList } from '../data/siteData';
+import { useSiteData } from '../context/SiteDataContext';
+import { updateSheetData } from '../data/apiConfig';
 
 export default function AdminPedukuhanEdit() {
   const { id } = useParams();
   const session = getSession();
   const [activeTab, setActiveTab] = useState('info');
-  const [toast, setToast] = useState('');
+  const [toast, setToast] = useState(null);
+  
+  const { loading, getPedukuhanData } = useSiteData();
 
   const pedukuhan = pedukuhanList.find((p) => p.id === id);
   if (!pedukuhan) return <div className="text-center py-20 text-gray-500">Pedukuhan tidak ditemukan.</div>;
   if (!hasAccessToDusun(session, id)) return <Navigate to="/admin/dashboard" replace />;
 
-  const original = pedukuhanData[id] || {};
-  const stored = loadLocalData();
-  const merged = { ...original, ...stored[id] };
+  if (loading) return <div className="text-center py-20 text-gray-500 animate-pulse">Memuat data dari server...</div>;
 
-  const showToast = (msg) => { setToast(msg); setTimeout(() => setToast(''), 2500); };
+  const data = getPedukuhanData(id);
+
+  const showToast = (msg, type = 'success') => { 
+    setToast({ msg, type }); 
+    setTimeout(() => setToast(null), 3000); 
+  };
 
   const tabs = [
     { key: 'info', label: 'Info Dukuh', icon: '📋' },
@@ -39,12 +34,12 @@ export default function AdminPedukuhanEdit() {
   ];
 
   return (
-    <div className="space-y-6 animate-fade-in-up">
+    <div className="space-y-6 animate-fade-in-up relative">
       {/* Toast */}
       {toast && (
-        <div className="fixed top-20 right-4 z-50 bg-leaf-600 text-white px-5 py-3 rounded-xl shadow-lg animate-fade-in text-sm font-medium flex items-center gap-2">
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-          {toast}
+        <div className={`fixed top-20 right-4 z-50 text-white px-5 py-3 rounded-xl shadow-lg animate-fade-in text-sm font-medium flex items-center gap-2 ${toast.type === 'error' ? 'bg-red-500' : 'bg-leaf-600'}`}>
+          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={toast.type === 'error' ? 'M6 18L18 6M6 6l12 12' : 'M5 13l4 4L19 7'} /></svg>
+          {toast.msg}
         </div>
       )}
 
@@ -54,13 +49,19 @@ export default function AdminPedukuhanEdit() {
           <span className="text-3xl">{pedukuhan.icon}</span>
           <div>
             <h1 className="text-xl font-bold text-gray-800">Pedukuhan {pedukuhan.nama}</h1>
-            <p className="text-sm text-gray-500">Kelola data pedukuhan</p>
+            <p className="text-sm text-gray-500">Kelola data terhubung langsung ke Google Sheets</p>
           </div>
         </div>
-        <Link to={`/pedukuhan/${id}`} target="_blank" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-medium text-leaf-700 bg-leaf-50 hover:bg-leaf-100 transition-colors">
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
-          Lihat Halaman Publik
-        </Link>
+        <div className="flex gap-2">
+          <button onClick={() => window.location.reload()} className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" /></svg>
+            Refresh Data
+          </button>
+          <Link to={`/pedukuhan/${id}`} target="_blank" className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-medium text-leaf-700 bg-leaf-50 hover:bg-leaf-100 transition-colors">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" /></svg>
+            Lihat Halaman Publik
+          </Link>
+        </div>
       </div>
 
       {/* Tabs */}
@@ -75,10 +76,10 @@ export default function AdminPedukuhanEdit() {
 
       {/* Tab Content */}
       <div className="bg-white rounded-xl border border-gray-100 p-6">
-        {activeTab === 'info' && <InfoTab id={id} data={merged} showToast={showToast} />}
-        {activeTab === 'statistik' && <StatistikTab id={id} data={merged} showToast={showToast} />}
-        {activeTab === 'umkm' && <UMKMTab id={id} data={merged} showToast={showToast} />}
-        {activeTab === 'galeri' && <GaleriTab id={id} data={merged} showToast={showToast} />}
+        {activeTab === 'info' && <InfoTab id={id} data={data} showToast={showToast} />}
+        {activeTab === 'statistik' && <StatistikTab id={id} data={data} showToast={showToast} />}
+        {activeTab === 'umkm' && <UMKMTab id={id} data={data} showToast={showToast} />}
+        {activeTab === 'galeri' && <GaleriTab id={id} data={data} showToast={showToast} />}
       </div>
     </div>
   );
@@ -92,12 +93,23 @@ function InfoTab({ id, data, showToast }) {
     peta_url: data.dukuh?.peta_url || '',
     hero_foto: data.hero_foto || '',
   });
+  const [isSaving, setIsSaving] = useState(false);
 
-  const handleSave = () => {
-    const stored = loadLocalData();
-    stored[id] = { ...stored[id], dukuh: { nama: form.nama, wa: form.wa, peta_url: form.peta_url }, hero_foto: form.hero_foto };
-    saveLocalData(stored);
-    showToast('Info pedukuhan berhasil disimpan!');
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      await updateSheetData('updateInfo', {
+        id_pedukuhan: id,
+        nama: form.nama,
+        wa: form.wa,
+        peta_url: form.peta_url,
+        hero_foto: form.hero_foto
+      });
+      showToast('Info pedukuhan berhasil disimpan ke Google Sheets!');
+    } catch (e) {
+      showToast('Gagal menyimpan info!', 'error');
+    }
+    setIsSaving(false);
   };
 
   return (
@@ -107,7 +119,7 @@ function InfoTab({ id, data, showToast }) {
       <InputField label="Nomor WhatsApp" value={form.wa} onChange={(v) => setForm({ ...form, wa: v })} placeholder="628xxxxxxxxxx" />
       <InputField label="URL Peta Google Maps" value={form.peta_url} onChange={(v) => setForm({ ...form, peta_url: v })} placeholder="https://maps.google.com/..." />
       <InputField label="URL Foto Hero" value={form.hero_foto} onChange={(v) => setForm({ ...form, hero_foto: v })} placeholder="https://..." />
-      <SaveButton onClick={handleSave} />
+      <SaveButton onClick={handleSave} isSaving={isSaving} />
     </div>
   );
 }
@@ -120,12 +132,23 @@ function StatistikTab({ id, data, showToast }) {
     laki_laki: data.statistik?.laki_laki || 0,
     perempuan: data.statistik?.perempuan || 0,
   });
+  const [isSaving, setIsSaving] = useState(false);
 
-  const handleSave = () => {
-    const stored = loadLocalData();
-    stored[id] = { ...stored[id], statistik: { jml_rt: Number(form.jml_rt), jml_kk: Number(form.jml_kk), laki_laki: Number(form.laki_laki), perempuan: Number(form.perempuan) } };
-    saveLocalData(stored);
-    showToast('Statistik berhasil disimpan!');
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      await updateSheetData('updateStatistik', {
+        id_pedukuhan: id,
+        jml_rt: form.jml_rt,
+        jml_kk: form.jml_kk,
+        laki_laki: form.laki_laki,
+        perempuan: form.perempuan
+      });
+      showToast('Statistik berhasil disimpan ke Google Sheets!');
+    } catch (e) {
+      showToast('Gagal menyimpan statistik!', 'error');
+    }
+    setIsSaving(false);
   };
 
   return (
@@ -140,7 +163,7 @@ function StatistikTab({ id, data, showToast }) {
       <div className="p-4 bg-blue-50 rounded-xl text-sm text-blue-700">
         <strong>Total Penduduk:</strong> {(Number(form.laki_laki) + Number(form.perempuan)).toLocaleString('id-ID')} jiwa
       </div>
-      <SaveButton onClick={handleSave} />
+      <SaveButton onClick={handleSave} isSaving={isSaving} />
     </div>
   );
 }
@@ -149,37 +172,73 @@ function StatistikTab({ id, data, showToast }) {
 function UMKMTab({ id, data, showToast }) {
   const [items, setItems] = useState(data.umkm || []);
   const [editing, setEditing] = useState(null); // index or 'new'
-  const [form, setForm] = useState({ nama: '', kategori: '', deskripsi: '', foto: null, wa: '' });
-
-  const save = (list) => {
-    const stored = loadLocalData();
-    stored[id] = { ...stored[id], umkm: list };
-    saveLocalData(stored);
-    setItems(list);
-  };
+  const [form, setForm] = useState({ nama: '', kategori: '', deskripsi: '', foto: '', wa: '', lokasi: '' });
+  const [isSaving, setIsSaving] = useState(false);
 
   const startEdit = (i) => { setEditing(i); setForm({ ...items[i] }); };
-  const startNew = () => { setEditing('new'); setForm({ nama: '', kategori: '', deskripsi: '', foto: null, wa: '' }); };
+  const startNew = () => { setEditing('new'); setForm({ nama: '', kategori: '', deskripsi: '', foto: '', wa: '', lokasi: '' }); };
   const cancel = () => setEditing(null);
 
-  const handleSave = () => {
-    const list = [...items];
-    if (editing === 'new') list.push(form);
-    else list[editing] = form;
-    save(list);
-    setEditing(null);
-    showToast(editing === 'new' ? 'UMKM ditambahkan!' : 'UMKM diperbarui!');
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      if (editing === 'new') {
+        await updateSheetData('addUMKM', {
+          ID_Pedukuhan: id,
+          Nama_Usaha: form.nama,
+          Kategori: form.kategori,
+          Deskripsi: form.deskripsi,
+          Foto: form.foto,
+          WA: form.wa,
+          Lokasi: form.lokasi
+        });
+        setItems([...items, form]);
+        showToast('UMKM berhasil ditambahkan ke Google Sheets!');
+      } else {
+        await updateSheetData('editUMKM', {
+          id_pedukuhan: id,
+          nama_usaha_lama: items[editing].nama,
+          newData: {
+            Nama_Usaha: form.nama,
+            Kategori: form.kategori,
+            Deskripsi: form.deskripsi,
+            Foto: form.foto,
+            WA: form.wa,
+            Lokasi: form.lokasi
+          }
+        });
+        const newList = [...items];
+        newList[editing] = form;
+        setItems(newList);
+        showToast('UMKM berhasil diperbarui!');
+      }
+      setEditing(null);
+    } catch(e) {
+      showToast('Gagal menyimpan UMKM!', 'error');
+    }
+    setIsSaving(false);
   };
 
-  const handleDelete = (i) => {
-    if (!confirm('Hapus UMKM ini?')) return;
-    const list = items.filter((_, idx) => idx !== i);
-    save(list);
-    showToast('UMKM dihapus.');
+  const handleDelete = async (i) => {
+    if (!confirm('Hapus UMKM ini secara permanen dari Google Sheets?')) return;
+    setIsSaving(true);
+    try {
+      await updateSheetData('deleteUMKM', {
+        id_pedukuhan: id,
+        nama_usaha: items[i].nama
+      });
+      setItems(items.filter((_, idx) => idx !== i));
+      showToast('UMKM berhasil dihapus.');
+    } catch(e) {
+      showToast('Gagal menghapus UMKM!', 'error');
+    }
+    setIsSaving(false);
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 relative">
+      {isSaving && <div className="absolute inset-0 z-10 bg-white/50 backdrop-blur-sm flex items-center justify-center rounded-xl"><div className="w-8 h-8 border-4 border-leaf-200 border-t-leaf-600 rounded-full animate-spin"></div></div>}
+      
       <div className="flex items-center justify-between">
         <h3 className="text-base font-semibold text-gray-800">Daftar UMKM ({items.length})</h3>
         <button onClick={startNew} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-leaf-600 text-white text-sm font-medium hover:bg-leaf-700 transition-colors">
@@ -196,6 +255,7 @@ function UMKMTab({ id, data, showToast }) {
           <TextareaField label="Deskripsi" value={form.deskripsi} onChange={(v) => setForm({ ...form, deskripsi: v })} />
           <InputField label="URL Foto" value={form.foto || ''} onChange={(v) => setForm({ ...form, foto: v })} />
           <InputField label="Nomor WhatsApp" value={form.wa} onChange={(v) => setForm({ ...form, wa: v })} />
+          <InputField label="Lokasi (Opsional)" value={form.lokasi || ''} onChange={(v) => setForm({ ...form, lokasi: v })} />
           <div className="flex gap-3">
             <button onClick={handleSave} className="px-5 py-2 rounded-xl bg-leaf-600 text-white text-sm font-medium hover:bg-leaf-700 transition-colors">Simpan</button>
             <button onClick={cancel} className="px-5 py-2 rounded-xl bg-gray-200 text-gray-700 text-sm font-medium hover:bg-gray-300 transition-colors">Batal</button>
@@ -206,7 +266,7 @@ function UMKMTab({ id, data, showToast }) {
       <div className="space-y-3">
         {items.length === 0 && <p className="text-sm text-gray-400 text-center py-8">Belum ada data UMKM.</p>}
         {items.map((item, i) => (
-          <div key={i} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+          <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors gap-4">
             <div>
               <p className="font-medium text-gray-800 text-sm">{item.nama}</p>
               <p className="text-xs text-gray-500">{item.kategori} — {item.deskripsi?.slice(0, 60)}...</p>
@@ -230,37 +290,69 @@ function UMKMTab({ id, data, showToast }) {
 function GaleriTab({ id, data, showToast }) {
   const [items, setItems] = useState(data.galeri || []);
   const [editing, setEditing] = useState(null);
-  const [form, setForm] = useState({ judul: '', kategori: '', foto: null, deskripsi: '' });
-
-  const save = (list) => {
-    const stored = loadLocalData();
-    stored[id] = { ...stored[id], galeri: list };
-    saveLocalData(stored);
-    setItems(list);
-  };
+  const [form, setForm] = useState({ judul: '', kategori: '', foto: '', deskripsi: '' });
+  const [isSaving, setIsSaving] = useState(false);
 
   const startEdit = (i) => { setEditing(i); setForm({ ...items[i] }); };
-  const startNew = () => { setEditing('new'); setForm({ judul: '', kategori: '', foto: null, deskripsi: '' }); };
+  const startNew = () => { setEditing('new'); setForm({ judul: '', kategori: '', foto: '', deskripsi: '' }); };
   const cancel = () => setEditing(null);
 
-  const handleSave = () => {
-    const list = [...items];
-    if (editing === 'new') list.push(form);
-    else list[editing] = form;
-    save(list);
-    setEditing(null);
-    showToast(editing === 'new' ? 'Foto galeri ditambahkan!' : 'Galeri diperbarui!');
+  const handleSave = async () => {
+    setIsSaving(true);
+    try {
+      if (editing === 'new') {
+        await updateSheetData('addGaleri', {
+          ID_Pedukuhan: id,
+          Judul: form.judul,
+          Kategori: form.kategori,
+          Foto_URL: form.foto,
+          Deskripsi: form.deskripsi
+        });
+        setItems([...items, form]);
+        showToast('Foto galeri berhasil ditambahkan!');
+      } else {
+        await updateSheetData('editGaleri', {
+          id_pedukuhan: id,
+          judul_lama: items[editing].judul,
+          newData: {
+            Judul: form.judul,
+            Kategori: form.kategori,
+            Foto_URL: form.foto,
+            Deskripsi: form.deskripsi
+          }
+        });
+        const newList = [...items];
+        newList[editing] = form;
+        setItems(newList);
+        showToast('Galeri berhasil diperbarui!');
+      }
+      setEditing(null);
+    } catch(e) {
+      showToast(`Gagal menyimpan Galeri! ${e.message}`, 'error');
+    }
+    setIsSaving(false);
   };
 
-  const handleDelete = (i) => {
-    if (!confirm('Hapus foto galeri ini?')) return;
-    const list = items.filter((_, idx) => idx !== i);
-    save(list);
-    showToast('Foto galeri dihapus.');
+  const handleDelete = async (i) => {
+    if (!confirm('Hapus foto galeri ini secara permanen?')) return;
+    setIsSaving(true);
+    try {
+      await updateSheetData('deleteGaleri', {
+        id_pedukuhan: id,
+        judul: items[i].judul
+      });
+      setItems(items.filter((_, idx) => idx !== i));
+      showToast('Foto galeri dihapus.');
+    } catch(e) {
+      showToast(`Gagal menghapus Galeri! ${e.message}`, 'error');
+    }
+    setIsSaving(false);
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-5 relative">
+      {isSaving && <div className="absolute inset-0 z-10 bg-white/50 backdrop-blur-sm flex items-center justify-center rounded-xl"><div className="w-8 h-8 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin"></div></div>}
+
       <div className="flex items-center justify-between">
         <h3 className="text-base font-semibold text-gray-800">Galeri Foto ({items.length})</h3>
         <button onClick={startNew} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-leaf-600 text-white text-sm font-medium hover:bg-leaf-700 transition-colors">
@@ -328,11 +420,15 @@ function TextareaField({ label, value, onChange, placeholder = '' }) {
   );
 }
 
-function SaveButton({ onClick }) {
+function SaveButton({ onClick, isSaving }) {
   return (
-    <button onClick={onClick} className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-leaf-600 text-white text-sm font-semibold hover:bg-leaf-700 shadow-lg shadow-leaf-600/20 hover:shadow-xl transition-all">
-      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
-      Simpan Perubahan
+    <button onClick={onClick} disabled={isSaving} className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-leaf-600 text-white text-sm font-semibold hover:bg-leaf-700 shadow-lg shadow-leaf-600/20 hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+      {isSaving ? (
+        <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+      ) : (
+        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+      )}
+      {isSaving ? 'Menyimpan...' : 'Simpan Perubahan'}
     </button>
   );
 }

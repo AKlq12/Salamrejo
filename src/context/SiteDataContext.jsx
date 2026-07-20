@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect, useContext } from 'react';
 import { fetchSheetData } from '../data/apiConfig';
 import { pedukuhanData as fallbackData } from '../data/siteData';
+import { getDirectImageUrl } from '../utils/imageUrl';
 
 const SiteDataContext = createContext();
 
@@ -76,7 +77,7 @@ export function SiteDataProvider({ children }) {
       nama: item.Nama_Usaha,
       kategori: item.Kategori,
       deskripsi: item.Deskripsi,
-      foto: item.Foto || null,
+      foto: getDirectImageUrl(item.Foto) || null,
       wa: item.WA,
       lokasi: item.Lokasi
     }));
@@ -84,7 +85,7 @@ export function SiteDataProvider({ children }) {
     const galeri = data.galeri.filter(item => item.ID_Pedukuhan === id).map(item => ({
       judul: item.Judul,
       kategori: item.Kategori,
-      foto: item.Foto_URL || null,
+      foto: getDirectImageUrl(item.Foto_URL) || null,
       deskripsi: item.Deskripsi
     }));
 
@@ -94,7 +95,8 @@ export function SiteDataProvider({ children }) {
         wa: infoDukuh.WA_Dukuh,
         peta_url: infoDukuh.Peta_URL
       },
-      hero_foto: infoDukuh.Foto_Hero || null,
+      hero_foto: getDirectImageUrl(infoDukuh.Foto_Hero) || null,
+      sejarah: infoDukuh.Sejarah || null,
       statistik,
       umkm,
       galeri

@@ -31,32 +31,56 @@ function getEmbedUrl(url) {
 }
 
 /**
- * Ekstrak koordinat dari URL Google Maps untuk membuat embed sederhana.
+ * Konversi URL Google Maps ke embed URL.
+ * Mendukung:
+ * - URL embed langsung (maps/embed)
+ * - URL place lengkap (/maps/place/NamaLokasi/@lat,lng,zoom)
+ * - URL koordinat (/@lat,lng,zoom)
+ * - URL dengan data parameter (!3d...!4d...)
+ * - Short links (maps.app.goo.gl) → fallback ke nama pedukuhan
  */
-function getSimpleEmbedUrl(url) {
+function getSimpleEmbedUrl(url, fallbackName) {
   if (!url) return null;
 
   // Jika sudah berformat embed, langsung pakai
   if (url.includes('/maps/embed')) return url;
 
-  // Coba extract place name
-  const placeMatch = url.match(/\/maps\/place\/([^/@]+)/);
-  if (placeMatch) {
-    const placeName = placeMatch[1].replace(/\+/g, ' ');
-    // Gunakan maps embed tanpa API key (q parameter)
-    return `https://maps.google.com/maps?q=${encodeURIComponent(placeName)}&output=embed`;
+  // Coba extract place name + koordinat dari URL lengkap
+  // Contoh: /maps/place/Dhisil,+Salamrejo,.../@-7.857,110.231,16z/...
+  const placeWithCoordMatch = url.match(/\/maps\/place\/([^/@]+)\/@(-?\d+\.?\d*),(-?\d+\.?\d*),?(\d+\.?\d*)?/);
+  if (placeWithCoordMatch) {
+    const lat = placeWithCoordMatch[2];
+    const lng = placeWithCoordMatch[3];
+    const zoom = placeWithCoordMatch[4] ? Math.round(parseFloat(placeWithCoordMatch[4])) : 16;
+    const placeName = decodeURIComponent(placeWithCoordMatch[1].replace(/\+/g, ' '));
+    return `https://maps.google.com/maps?q=${encodeURIComponent(placeName)}&ll=${lat},${lng}&z=${zoom}&output=embed`;
   }
 
-  // Coba extract koordinat
-  const coordMatch = url.match(/\/@(-?\d+\.?\d*),(-?\d+\.?\d*)/);
+  // Coba extract place name saja (tanpa koordinat)
+  const placeMatch = url.match(/\/maps\/place\/([^/@]+)/);
+  if (placeMatch) {
+    const placeName = decodeURIComponent(placeMatch[1].replace(/\+/g, ' '));
+    return `https://maps.google.com/maps?q=${encodeURIComponent(placeName)}&z=16&output=embed`;
+  }
+
+  // Coba extract koordinat dari /@lat,lng,zoom
+  const coordMatch = url.match(/\/@(-?\d+\.?\d*),(-?\d+\.?\d*),?(\d+\.?\d*)?/);
   if (coordMatch) {
-    return `https://maps.google.com/maps?q=${coordMatch[1]},${coordMatch[2]}&output=embed`;
+    const zoom = coordMatch[3] ? Math.round(parseFloat(coordMatch[3])) : 16;
+    return `https://maps.google.com/maps?q=${coordMatch[1]},${coordMatch[2]}&z=${zoom}&output=embed`;
   }
 
   // Fallback: coba extract dari data=!...!3d...!4d...
   const dataMatch = url.match(/!3d(-?\d+\.?\d*)!4d(-?\d+\.?\d*)/);
   if (dataMatch) {
-    return `https://maps.google.com/maps?q=${dataMatch[1]},${dataMatch[2]}&output=embed`;
+    return `https://maps.google.com/maps?q=${dataMatch[1]},${dataMatch[2]}&z=16&output=embed`;
+  }
+
+  // Fallback untuk short links (maps.app.goo.gl) dan format lain yang tidak dikenali:
+  // Gunakan nama pedukuhan sebagai query pencarian di embed
+  if (fallbackName) {
+    const searchQuery = `${fallbackName}, Salamrejo, Sentolo`;
+    return `https://maps.google.com/maps?q=${encodeURIComponent(searchQuery)}&z=15&output=embed`;
   }
 
   return null;
@@ -65,8 +89,8 @@ function getSimpleEmbedUrl(url) {
 export default function PedukuhanMapContact({ dukuh, pedukuhanNama }) {
   const [ref, isInView] = useInView({ threshold: 0.1 });
 
-  // Konversi peta_url ke embed URL
-  const embedUrl = dukuh?.peta_url ? getSimpleEmbedUrl(dukuh.peta_url) : null;
+  // Konversi peta_url ke embed URL (fallback ke nama pedukuhan jika URL tidak bisa diparsing)
+  const embedUrl = dukuh?.peta_url ? getSimpleEmbedUrl(dukuh.peta_url, pedukuhanNama) : null;
 
   return (
     <section id="pedukuhan-map-contact" className="py-16 sm:py-20 bg-warm-100">

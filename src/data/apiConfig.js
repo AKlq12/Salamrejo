@@ -105,3 +105,30 @@ export const fetchSheetData = async (sheetName) => {
     return [];
   }
 };
+
+// URL API Google Apps Script (Untuk Insert, Edit, Delete)
+export const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyjiwRR7eqKTFIf9C9xS04GzNCAkutAqUGstuH8KsIQ0LEMDEuB6YVKis7DrG0a3a6BnA/exec";
+
+/**
+ * Mengirim data ke Google Sheets menggunakan Google Apps Script
+ */
+export const updateSheetData = async (action, payload) => {
+  try {
+    // Gunakan mode 'no-cors' agar browser tidak memblokir redirect 302 dari Google
+    const response = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {
+        'Content-Type': 'text/plain',
+      },
+      body: JSON.stringify({ action, payload }),
+    });
+    
+    // Karena menggunakan mode 'no-cors', response bersifat "opaque" (tidak terbaca oleh Javascript).
+    // Selama fetch tidak gagal di tingkat jaringan, kita asumsikan request berhasil sampai ke Google.
+    return { status: "success" };
+  } catch (error) {
+    console.error("Error updating Google Sheets:", error);
+    throw new Error("Gagal menghubungi server Google. Pastikan koneksi internet stabil.");
+  }
+};

@@ -1,17 +1,20 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 export default function PedukuhanHero({ pedukuhan, data }) {
   const heroFoto = data?.hero_foto;
+  const [imgError, setImgError] = useState(false);
 
   return (
     <section id="pedukuhan-hero" className="relative min-h-[60vh] sm:min-h-[70vh] flex items-end overflow-hidden">
       {/* Background — image or gradient */}
-      {heroFoto ? (
+      {heroFoto && !imgError ? (
         <>
           <img
             src={heroFoto}
             alt={`Pedukuhan ${pedukuhan.nama}`}
             className="absolute inset-0 w-full h-full object-cover"
+            onError={() => setImgError(true)}
           />
           {/* Dark overlay for text readability */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
