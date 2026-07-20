@@ -20,17 +20,17 @@ export function getDirectImageUrl(url) {
   // Google Drive: https://drive.google.com/uc?id=FILE_ID
   const driveFileMatch = trimmed.match(/drive\.google\.com\/file\/d\/([a-zA-Z0-9_-]+)/);
   if (driveFileMatch) {
-    return `https://drive.google.com/uc?export=view&id=${driveFileMatch[1]}`;
+    return `https://drive.google.com/thumbnail?id=${driveFileMatch[1]}&sz=w1000`;
   }
 
   const driveOpenMatch = trimmed.match(/drive\.google\.com\/open\?id=([a-zA-Z0-9_-]+)/);
   if (driveOpenMatch) {
-    return `https://drive.google.com/uc?export=view&id=${driveOpenMatch[1]}`;
+    return `https://drive.google.com/thumbnail?id=${driveOpenMatch[1]}&sz=w1000`;
   }
 
   const driveUcMatch = trimmed.match(/drive\.google\.com\/uc\?.*id=([a-zA-Z0-9_-]+)/);
   if (driveUcMatch) {
-    return `https://drive.google.com/uc?export=view&id=${driveUcMatch[1]}`;
+    return `https://drive.google.com/thumbnail?id=${driveUcMatch[1]}&sz=w1000`;
   }
 
   // Google Photos: lh3.googleusercontent.com links — langsung pakai

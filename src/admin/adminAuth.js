@@ -3,14 +3,6 @@
 
 export const ADMIN_CREDENTIALS = [
   { username: 'adminsalamrejo', password: 'salamrejo123', role: 'superadmin', dusunId: null, displayName: 'Admin Salamrejo' },
-  { username: 'dusunklebakan', password: 'klebakan123', role: 'dusun', dusunId: 'klebakan', displayName: 'Admin Klebakan' },
-  { username: 'dusunmentobayan', password: 'mentobayan123', role: 'dusun', dusunId: 'mentobayankidul', displayName: 'Admin Mentobayan' },
-  { username: 'dusungiyoso', password: 'giyoso123', role: 'dusun', dusunId: 'giyoso', displayName: 'Admin Giyoso' },
-  { username: 'dusunkarangwetan', password: 'karangwetan123', role: 'dusun', dusunId: 'karangwetan', displayName: 'Admin Karang Wetan' },
-  { username: 'dusunkidulan', password: 'kidulan123', role: 'dusun', dusunId: 'kidulan', displayName: 'Admin Kidulan' },
-  { username: 'dusundhisil', password: 'dhisil123', role: 'dusun', dusunId: 'dhisil', displayName: 'Admin Dhisil' },
-  { username: 'dusunsalam', password: 'salam123', role: 'dusun', dusunId: 'salam', displayName: 'Admin Salam' },
-  { username: 'dusunngrandu', password: 'ngrandu123', role: 'dusun', dusunId: 'ngandu', displayName: 'Admin Ngrandu' },
 ];
 
 const SESSION_KEY = 'salamrejo_admin_session';

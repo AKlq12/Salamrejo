@@ -6,7 +6,7 @@ export default function PedukuhanHero({ pedukuhan, data }) {
   const [imgError, setImgError] = useState(false);
 
   return (
-    <section id="pedukuhan-hero" className="relative min-h-[60vh] sm:min-h-[70vh] flex items-end overflow-hidden">
+    <section id="pedukuhan-hero" className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background — image or gradient */}
       {heroFoto && !imgError ? (
         <>
@@ -17,7 +17,7 @@ export default function PedukuhanHero({ pedukuhan, data }) {
             onError={() => setImgError(true)}
           />
           {/* Dark overlay for text readability */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
+          <div className="absolute inset-0 bg-black/70" />
         </>
       ) : (
         <>

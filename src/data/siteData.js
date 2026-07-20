@@ -73,8 +73,8 @@ export const pedukuhanList = [
     icon: "🌳",
   },
   {
-    id: "ngandu",
-    nama: "Ngandu",
+    id: "ngrandu",
+    nama: "Ngrandu",
     deskripsi: "Pedukuhan dengan keunikan geografis dan potensi peternakan serta pertanian organik.",
     warna: "from-emerald-500 to-teal-800",
     icon: "🐃",
@@ -209,9 +209,9 @@ export const pedukuhanData = {
       { judul: "PKK Salam", kategori: "Kegiatan", foto: null, deskripsi: "Kegiatan PKK dalam rangka pemberdayaan ibu-ibu." },
     ],
   },
-  ngandu: {
+  ngrandu: {
     hero_foto: null,
-    dukuh: { nama: "Bapak/Ibu Dukuh Ngandu", wa: "", peta_url: "" },
+    dukuh: { nama: "Bapak/Ibu Dukuh Ngrandu", wa: "", peta_url: "" },
     statistik: { jml_rt: 4, jml_kk: 115, laki_laki: 250, perempuan: 240 },
     umkm: [
       { nama: "Susu Sapi Segar", kategori: "Makanan", deskripsi: "Susu sapi segar dari peternakan lokal pedukuhan.", foto: null, wa: "", lokasi: "" },
@@ -219,7 +219,7 @@ export const pedukuhanData = {
       { nama: "Ternak Sapi", kategori: "Pertanian", deskripsi: "Peternakan sapi dengan manajemen modern dan pakan ternak lokal.", foto: null, wa: "", lokasi: "" },
     ],
     galeri: [
-      { judul: "Padang Rumput Ngandu", kategori: "Alam", foto: null, deskripsi: "Padang rumput hijau tempat ternak merumput." },
+      { judul: "Padang Rumput Ngrandu", kategori: "Alam", foto: null, deskripsi: "Padang rumput hijau tempat ternak merumput." },
       { judul: "Pengajian Rutin", kategori: "Kegiatan", foto: null, deskripsi: "Pengajian rutin malam Jumat oleh warga." },
       { judul: "Tradisi Rasulan", kategori: "Budaya", foto: null, deskripsi: "Tradisi rasulan pasca panen raya sebagai bentuk syukur." },
     ],

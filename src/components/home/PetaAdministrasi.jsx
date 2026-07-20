@@ -104,7 +104,7 @@ export default function PetaAdministrasi() {
                     { nama: 'Kidulan', warna: 'bg-green-400' },
                     { nama: 'Salam', warna: 'bg-teal-400' },
                     { nama: 'Dhisil', warna: 'bg-pink-300' },
-                    { nama: 'Ngandu', warna: 'bg-blue-500' },
+                    { nama: 'Ngrandu', warna: 'bg-blue-500' },
                   ].map((item) => (
                     <div key={item.nama} className="flex items-center gap-1.5">
                       <div className={`w-3 h-3 rounded-sm ${item.warna} shadow-sm`} />

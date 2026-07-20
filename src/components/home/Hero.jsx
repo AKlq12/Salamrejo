@@ -1,6 +1,20 @@
+import { useState, useEffect } from 'react';
 import { desaInfo } from '../../data/siteData';
 
+const BACKGROUND_IMAGES = [
+  '/foto/3.JPG'
+];
+
 export default function Hero() {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % BACKGROUND_IMAGES.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
   const scrollToPedukuhan = () => {
     document.getElementById('pedukuhan-hub')?.scrollIntoView({ behavior: 'smooth' });
   };
@@ -12,20 +26,25 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-leaf-950"
     >
-      {/* Background with gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-leaf-950 via-leaf-900 to-leaf-800" />
+      {/* Slideshow Background */}
+      {BACKGROUND_IMAGES.map((img, index) => (
+        <div
+          key={img}
+          className={`absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out ${index === currentImageIndex ? 'opacity-100' : 'opacity-0'
+            }`}
+        >
+          <img
+            src={img}
+            alt={`Hero background ${index + 1}`}
+            className="w-full h-full object-cover"
+          />
+        </div>
+      ))}
 
-      {/* Animated background patterns */}
-      <div className="absolute inset-0 opacity-10">
-        <div className="absolute top-1/4 left-1/4 w-48 sm:w-72 lg:w-96 h-48 sm:h-72 lg:h-96 rounded-full bg-leaf-400 blur-3xl animate-float" />
-        <div className="absolute bottom-1/4 right-1/4 w-40 sm:w-64 lg:w-80 h-40 sm:h-64 lg:h-80 rounded-full bg-leaf-300 blur-3xl animate-float delay-700" />
-        <div className="absolute top-1/2 left-1/2 w-32 sm:w-48 lg:w-64 h-32 sm:h-48 lg:h-64 rounded-full bg-leaf-500 blur-3xl animate-float delay-300" />
-      </div>
-
-      {/* Decorative leaf patterns */}
-      <div className="absolute inset-0 opacity-5 pattern-dots" />
+      {/* Background overlay for text readability */}
+      <div className="absolute inset-0 bg-black/50" />
 
       {/* Content */}
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center py-20">
@@ -40,7 +59,7 @@ export default function Hero() {
         {/* Main Title */}
         <h1 className="animate-fade-in-up delay-100 text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 leading-tight">
           Selamat Datang di
-          <span className="block bg-gradient-to-r from-leaf-300 via-leaf-400 to-emerald-300 bg-clip-text text-transparent mt-1 sm:mt-2">
+          <span className="block text-leaf-600 drop-shadow-md mt-1 sm:mt-2">
             Desa Salamrejo
           </span>
         </h1>
@@ -53,17 +72,17 @@ export default function Hero() {
         {/* Stats mini */}
         <div className="animate-fade-in-up delay-300 flex items-center justify-center gap-6 sm:gap-10 mb-10">
           <div className="text-center">
-            <p className="text-2xl sm:text-3xl font-bold text-leaf-300">8</p>
+            <p className="text-2xl sm:text-3xl font-bold text-leaf-600">8</p>
             <p className="text-xs sm:text-sm text-white/50">Pedukuhan</p>
           </div>
           <div className="w-px h-10 bg-white/20" />
           <div className="text-center">
-            <p className="text-2xl sm:text-3xl font-bold text-leaf-300">35+</p>
+            <p className="text-2xl sm:text-3xl font-bold text-leaf-600">35+</p>
             <p className="text-xs sm:text-sm text-white/50">RT</p>
           </div>
           <div className="w-px h-10 bg-white/20" />
           <div className="text-center">
-            <p className="text-2xl sm:text-3xl font-bold text-leaf-300">1000+</p>
+            <p className="text-2xl sm:text-3xl font-bold text-leaf-600">1000+</p>
             <p className="text-xs sm:text-sm text-white/50">Keluarga</p>
           </div>
         </div>
@@ -73,7 +92,7 @@ export default function Hero() {
           <button
             onClick={scrollToPedukuhan}
             id="cta-explore"
-            className="group px-8 py-3.5 rounded-xl bg-gradient-to-r from-leaf-500 to-leaf-600 text-white font-semibold shadow-lg shadow-leaf-500/30 hover:shadow-xl hover:shadow-leaf-500/40 hover:from-leaf-400 hover:to-leaf-500 transition-all duration-300 transform hover:-translate-y-0.5 flex items-center gap-2"
+            className="group px-8 py-3.5 rounded-xl bg-leaf-600 text-white font-semibold shadow-lg shadow-leaf-600/30 hover:shadow-xl hover:shadow-leaf-600/40 hover:bg-leaf-500 transition-all duration-300 transform hover:-translate-y-0.5 flex items-center gap-2"
           >
             Jelajahi Pedukuhan
             <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
