@@ -107,7 +107,10 @@ export default function PetaAdministrasi() {
                     { nama: 'Ngrandu', warna: '#003cf2' },
                   ].map((item) => (
                     <div key={item.nama} className="flex items-center gap-1.5">
-                      <div className={`w-3 h-3 rounded-sm ${item.warna} shadow-sm`} />
+                      <div 
+                        className="w-3 h-3 rounded-sm shadow-sm" 
+                        style={{ backgroundColor: item.warna }} 
+                      />
                       <span className="text-[10px] sm:text-xs text-gray-600 font-medium">{item.nama}</span>
                     </div>
                   ))}
