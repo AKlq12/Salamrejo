@@ -31,8 +31,8 @@ export const pedukuhanList = [
     icon: "🌾",
   },
   {
-    id: "mentobayankidul",
-    nama: "Mentobayan Kidul",
+    id: "mentobayan",
+    nama: "Mentobayan",
     deskripsi: "Pedukuhan yang kaya akan tradisi budaya Jawa dan memiliki komunitas petani yang aktif.",
     warna: "from-teal-500 to-emerald-700",
     icon: "🏡",
@@ -121,10 +121,10 @@ export const pedukuhanData = {
   },
   mentobayankidul: {
     hero_foto: null,
-    dukuh: { nama: "Bapak/Ibu Dukuh Mentobayan Kidul", wa: "", peta_url: "" },
+    dukuh: { nama: "Bapak/Ibu Dukuh Mentobayan", wa: "", peta_url: "" },
     statistik: { jml_rt: 4, jml_kk: 120, laki_laki: 260, perempuan: 250 },
     umkm: [
-      { nama: "Batik Tulis Mentobayan", kategori: "Kerajinan", deskripsi: "Batik tulis dengan motif khas Mentobayan Kidul.", foto: null, wa: "", lokasi: "" },
+      { nama: "Batik Tulis Mentobayan", kategori: "Kerajinan", deskripsi: "Batik tulis dengan motif khas Mentobayan.", foto: null, wa: "", lokasi: "" },
       { nama: "Emping Melinjo", kategori: "Makanan", deskripsi: "Emping melinjo renyah buatan tangan ibu-ibu setempat.", foto: null, wa: "", lokasi: "" },
       { nama: "Pupuk Organik", kategori: "Pertanian", deskripsi: "Pupuk organik dari limbah ternak untuk pertanian berkelanjutan.", foto: null, wa: "", lokasi: "" },
     ],
