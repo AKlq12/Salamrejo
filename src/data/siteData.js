@@ -119,7 +119,7 @@ export const pedukuhanData = {
       { judul: "Kegiatan Gotong Royong", kategori: "Kegiatan", foto: null, deskripsi: "Warga bergotong royong membersihkan lingkungan pedukuhan." },
     ],
   },
-  mentobayankidul: {
+  mentobayan: {
     hero_foto: null,
     dukuh: { nama: "Bapak/Ibu Dukuh Mentobayan", wa: "", peta_url: "" },
     statistik: { jml_rt: 4, jml_kk: 120, laki_laki: 260, perempuan: 250 },
