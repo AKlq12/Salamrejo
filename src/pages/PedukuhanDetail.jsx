@@ -2,7 +2,6 @@ import { useParams, Link } from 'react-router-dom';
 import { pedukuhanList } from '../data/siteData';
 import { useSiteData } from '../context/SiteDataContext';
 import PedukuhanHero from '../components/pedukuhan/PedukuhanHero';
-import PedukuhanSejarah from '../components/pedukuhan/PedukuhanSejarah';
 import PedukuhanStats from '../components/pedukuhan/PedukuhanStats';
 import PedukuhanUMKM from '../components/pedukuhan/PedukuhanUMKM';
 import PedukuhanGallery from '../components/pedukuhan/PedukuhanGallery';
@@ -68,7 +67,6 @@ export default function PedukuhanDetail() {
   return (
     <>
       <PedukuhanHero pedukuhan={pedukuhan} data={data} />
-      <PedukuhanSejarah sejarah={data?.sejarah} pedukuhanNama={pedukuhan.nama} />
       <PedukuhanStats statistik={data?.statistik} />
       <PedukuhanUMKM umkm={data?.umkm} />
       <PedukuhanGallery galeri={data?.galeri} />

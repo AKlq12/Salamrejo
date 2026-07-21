@@ -15,7 +15,7 @@ export default function PedukuhanGallery({ galeri = [] }) {
               <span>📸</span> Dokumentasi
             </span>
             <h2 className="text-2xl sm:text-3xl font-bold text-leaf-900">
-              Galeri & Budaya
+              Kegiatan & Fasilitas
             </h2>
             <p className="text-sm text-gray-500 mt-2">
               Kegiatan, tradisi, dan keindahan pedukuhan

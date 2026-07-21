@@ -17,7 +17,7 @@ export default function PedukuhanHero({ pedukuhan, data }) {
             onError={() => setImgError(true)}
           />
           {/* Dark overlay for text readability */}
-          <div className="absolute inset-0 bg-black/70" />
+          <div className="absolute inset-0 bg-black/40" />
         </>
       ) : (
         <>
@@ -76,8 +76,8 @@ export default function PedukuhanHero({ pedukuhan, data }) {
       </div>
 
       {/* Bottom wave */}
-      <div className="absolute bottom-0 left-0 right-0">
-        <svg viewBox="0 0 1440 100" fill="none" className="w-full h-auto">
+      <div className="absolute bottom-[-1px] left-0 right-0 leading-none pointer-events-none">
+        <svg viewBox="0 0 1440 100" fill="none" className="w-full h-auto block">
           <path
             d="M0 50 C360 100 720 0 1080 50 C1260 75 1360 60 1440 50 L1440 100 L0 100Z"
             fill="var(--color-warm-50)"

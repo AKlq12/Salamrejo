@@ -17,7 +17,7 @@ export const desaInfo = {
     "Mendorong partisipasi aktif masyarakat dalam pembangunan desa.",
   ],
   pemerintahan: {
-    lurah: "Bapak/Ibu Lurah Salamrejo",
+    lurah: "Bapak Dani Pristiawan, S.P., M.I.P.",
     carik: "Bapak/Ibu Carik Salamrejo",
   },
 };
