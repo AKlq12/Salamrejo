@@ -4,6 +4,7 @@ import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import Home from './pages/Home'
 import PedukuhanDetail from './pages/PedukuhanDetail'
+import NotFound from './pages/NotFound'
 
 // Admin pages
 import AdminLogin from './admin/AdminLogin'
@@ -22,14 +23,20 @@ function App() {
         <Route path="/pedukuhan/:id" element={<><Navbar /><main className="min-h-screen"><PedukuhanDetail /></main><Footer /></>} />
 
         {/* ===== ADMIN ROUTES (hidden, no navbar/footer) ===== */}
-        <Route path="/admin" element={<AdminLogin />} />
-        <Route path="/admin" element={<AdminRoute><AdminLayout /></AdminRoute>}>
-          <Route path="dashboard" element={<AdminDashboard />} />
-          <Route path="pedukuhan/:id" element={<AdminPedukuhanEdit />} />
+        <Route path="/admin">
+          <Route index element={<AdminLogin />} />
+          <Route element={<AdminRoute><AdminLayout /></AdminRoute>}>
+            <Route path="dashboard" element={<AdminDashboard />} />
+            <Route path="pedukuhan/:id" element={<AdminPedukuhanEdit />} />
+          </Route>
         </Route>
+
+        {/* ===== 404 FALLBACK ROUTE ===== */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </>
   )
 }
 
 export default App
+
