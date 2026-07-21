@@ -97,14 +97,14 @@ export default function PetaAdministrasi() {
                 <p className="text-[10px] sm:text-xs text-gray-400 mb-3 font-medium uppercase tracking-wider">Legenda Pedukuhan</p>
                 <div className="flex flex-wrap gap-2 sm:gap-3">
                   {[
-                    { nama: 'Klebakan', warna: 'bg-red-400' },
-                    { nama: 'Mentobayan', warna: 'bg-orange-400' },
-                    { nama: 'Giyoso', warna: 'bg-yellow-300' },
-                    { nama: 'Karangwetan', warna: 'bg-cyan-300' },
-                    { nama: 'Kidulan', warna: 'bg-green-400' },
-                    { nama: 'Salam', warna: 'bg-teal-400' },
-                    { nama: 'Dhisil', warna: 'bg-pink-300' },
-                    { nama: 'Ngrandu', warna: 'bg-blue-500' },
+                    { nama: 'Klebakan', warna: '#d46766' },
+                    { nama: 'Mentobayan', warna: '#f27900' },
+                    { nama: 'Giyoso', warna: '#f2f179' },
+                    { nama: 'Karangwetan', warna: '#04f0f2' },
+                    { nama: 'Kidulan', warna: '#f27997' },
+                    { nama: 'Salam', warna: '#00b0af' },
+                    { nama: 'Dhisil', warna: '#7900f2' },
+                    { nama: 'Ngrandu', warna: '#003cf2' },
                   ].map((item) => (
                     <div key={item.nama} className="flex items-center gap-1.5">
                       <div className={`w-3 h-3 rounded-sm ${item.warna} shadow-sm`} />
