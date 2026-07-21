@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { login, getSession } from './adminAuth';
 
 export default function AdminLogin() {
@@ -150,6 +150,19 @@ export default function AdminLogin() {
               )}
             </button>
           </form>
+
+          {/* Kembali ke Halaman Utama */}
+          <div className="mt-6 pt-5 border-t border-white/10 text-center">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-2 text-xs font-medium text-leaf-300 hover:text-white transition-colors group"
+            >
+              <svg className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+              </svg>
+              Kembali ke Beranda Utama
+            </Link>
+          </div>
         </div>
 
         {/* Footer */}
