@@ -74,7 +74,7 @@ export default function AdminDashboard() {
       textColor: 'text-amber-600',
     },
     {
-      label: 'Total Galeri',
+      label: 'Total Kegiatan & Fasilitas',
       value: totalStats.galeri.toLocaleString('id-ID'),
       icon: (
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -160,7 +160,7 @@ export default function AdminDashboard() {
                   </div>
                   <div className="bg-gray-50 rounded-lg p-2">
                     <p className="text-sm font-bold text-gray-800">{d?.galeri?.length || 0}</p>
-                    <p className="text-[10px] text-gray-400">Galeri</p>
+                    <p className="text-[10px] text-gray-400">Kegiatan</p>
                   </div>
                 </div>
 

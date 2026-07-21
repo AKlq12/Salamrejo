@@ -30,7 +30,7 @@ export default function AdminPedukuhanEdit() {
     { key: 'info', label: 'Info Dukuh', icon: '📋' },
     { key: 'statistik', label: 'Statistik', icon: '📊' },
     { key: 'umkm', label: 'UMKM', icon: '🏪' },
-    { key: 'galeri', label: 'Galeri', icon: '🖼️' },
+    { key: 'galeri', label: 'Kegiatan & Fasilitas', icon: '📸' },
   ];
 
   return (
@@ -179,10 +179,38 @@ function UMKMTab({ id, data, showToast }) {
   const [editing, setEditing] = useState(null); // index or 'new'
   const [form, setForm] = useState({ nama: '', kategori: '', deskripsi: '', foto: '', wa: '', lokasi: '' });
   const [isSaving, setIsSaving] = useState(false);
+  const [draggedItem, setDraggedItem] = useState(null);
 
   const startEdit = (i) => { setEditing(i); setForm({ ...items[i] }); };
   const startNew = () => { setEditing('new'); setForm({ nama: '', kategori: '', deskripsi: '', foto: '', wa: '', lokasi: '' }); };
   const cancel = () => setEditing(null);
+
+  const handleDragStart = (index) => setDraggedItem(index);
+  const handleDragEnter = (index) => {
+    if (draggedItem !== null && draggedItem !== index) {
+      const newItems = [...items];
+      const dragged = newItems[draggedItem];
+      newItems.splice(draggedItem, 1);
+      newItems.splice(index, 0, dragged);
+      setDraggedItem(index);
+      setItems(newItems);
+    }
+  };
+  const handleDragEnd = async () => {
+    setDraggedItem(null);
+    setIsSaving(true);
+    try {
+      await updateSheetData('reorderUMKM', {
+        id_pedukuhan: id,
+        new_order_names: items.map(item => item.nama)
+      });
+      await refreshData(true);
+      showToast('Urutan UMKM berhasil diperbarui!');
+    } catch (e) {
+      showToast('Gagal menyimpan urutan! Pastikan Apps Script mendukung reorderUMKM.', 'error');
+    }
+    setIsSaving(false);
+  };
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -274,10 +302,25 @@ function UMKMTab({ id, data, showToast }) {
       <div className="space-y-3">
         {items.length === 0 && <p className="text-sm text-gray-400 text-center py-8">Belum ada data UMKM.</p>}
         {items.map((item, i) => (
-          <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors gap-4">
-            <div>
-              <p className="font-medium text-gray-800 text-sm">{item.nama}</p>
-              <p className="text-xs text-gray-500">{item.kategori} — {item.deskripsi?.slice(0, 60)}...</p>
+          <div 
+            key={item.nama || i} 
+            draggable 
+            onDragStart={() => handleDragStart(i)}
+            onDragEnter={() => handleDragEnter(i)}
+            onDragEnd={handleDragEnd}
+            onDragOver={(e) => e.preventDefault()}
+            className={`flex flex-col sm:flex-row sm:items-center justify-between p-4 rounded-xl transition-all gap-4 cursor-move border ${draggedItem === i ? 'bg-white shadow-lg border-leaf-400 scale-[1.02] z-10' : 'bg-gray-50 border-transparent hover:bg-gray-100 hover:border-gray-200'}`}
+          >
+            <div className="flex items-center gap-4">
+              <div className="cursor-move text-gray-400 hover:text-gray-600">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" /></svg>
+              </div>
+              <div>
+                <p className="font-medium text-gray-800 text-sm">
+                  <span className="inline-block w-5 text-gray-400 text-xs">{i + 1}.</span> {item.nama}
+                </p>
+                <p className="text-xs text-gray-500 pl-6">{item.kategori} — {item.deskripsi?.slice(0, 60)}...</p>
+              </div>
             </div>
             <div className="flex gap-2">
               <button onClick={() => startEdit(i)} className="p-2 rounded-lg text-blue-600 hover:bg-blue-50 transition-colors" title="Edit">
@@ -301,10 +344,38 @@ function GaleriTab({ id, data, showToast }) {
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({ judul: '', kategori: '', foto: '', deskripsi: '' });
   const [isSaving, setIsSaving] = useState(false);
+  const [draggedItem, setDraggedItem] = useState(null);
 
   const startEdit = (i) => { setEditing(i); setForm({ ...items[i] }); };
   const startNew = () => { setEditing('new'); setForm({ judul: '', kategori: '', foto: '', deskripsi: '' }); };
   const cancel = () => setEditing(null);
+
+  const handleDragStart = (index) => setDraggedItem(index);
+  const handleDragEnter = (index) => {
+    if (draggedItem !== null && draggedItem !== index) {
+      const newItems = [...items];
+      const dragged = newItems[draggedItem];
+      newItems.splice(draggedItem, 1);
+      newItems.splice(index, 0, dragged);
+      setDraggedItem(index);
+      setItems(newItems);
+    }
+  };
+  const handleDragEnd = async () => {
+    setDraggedItem(null);
+    setIsSaving(true);
+    try {
+      await updateSheetData('reorderGaleri', {
+        id_pedukuhan: id,
+        new_order_titles: items.map(item => item.judul)
+      });
+      await refreshData(true);
+      showToast('Urutan Galeri berhasil diperbarui!');
+    } catch (e) {
+      showToast('Gagal menyimpan urutan! Pastikan Apps Script mendukung reorderGaleri.', 'error');
+    }
+    setIsSaving(false);
+  };
 
   const handleSave = async () => {
     setIsSaving(true);
@@ -366,7 +437,7 @@ function GaleriTab({ id, data, showToast }) {
       {isSaving && <div className="absolute inset-0 z-10 bg-white/50 backdrop-blur-sm flex items-center justify-center rounded-xl"><div className="w-8 h-8 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin"></div></div>}
 
       <div className="flex items-center justify-between">
-        <h3 className="text-base font-semibold text-gray-800">Galeri Foto ({items.length})</h3>
+        <h3 className="text-base font-semibold text-gray-800">Kegiatan & Fasilitas ({items.length})</h3>
         <button onClick={startNew} className="flex items-center gap-2 px-4 py-2 rounded-xl bg-leaf-600 text-white text-sm font-medium hover:bg-leaf-700 transition-colors">
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
           Tambah Foto
@@ -387,12 +458,23 @@ function GaleriTab({ id, data, showToast }) {
         </div>
       )}
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {items.length === 0 && <p className="text-sm text-gray-400 text-center py-8 col-span-2">Belum ada foto galeri.</p>}
+      <div className="space-y-3">
+        {items.length === 0 && <p className="text-sm text-gray-400 text-center py-8">Belum ada data kegiatan/fasilitas.</p>}
         {items.map((item, i) => (
-          <div key={i} className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-lg bg-gray-200 flex items-center justify-center text-lg overflow-hidden">
+          <div 
+            key={item.judul || i}
+            draggable
+            onDragStart={() => handleDragStart(i)}
+            onDragEnter={() => handleDragEnter(i)}
+            onDragEnd={handleDragEnd}
+            onDragOver={(e) => e.preventDefault()}
+            className={`flex items-center justify-between p-4 rounded-xl transition-all cursor-move border ${draggedItem === i ? 'bg-white shadow-lg border-purple-400 scale-[1.02] z-10' : 'bg-gray-50 border-transparent hover:bg-gray-100 hover:border-gray-200'}`}
+          >
+            <div className="flex items-center gap-4">
+              <div className="cursor-move text-gray-400 hover:text-gray-600">
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8h16M4 16h16" /></svg>
+              </div>
+              <div className="w-12 h-12 rounded-lg bg-gray-200 flex items-center justify-center text-lg overflow-hidden shrink-0">
                 {item.foto ? <img src={item.foto} alt={item.judul} className="w-full h-full object-cover" /> : '🖼️'}
               </div>
               <div>
