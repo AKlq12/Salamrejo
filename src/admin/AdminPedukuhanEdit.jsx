@@ -87,6 +87,7 @@ export default function AdminPedukuhanEdit() {
 
 /* ========== INFO TAB ========== */
 function InfoTab({ id, data, showToast }) {
+  const { refreshData } = useSiteData();
   const [form, setForm] = useState({
     nama: data.dukuh?.nama || '',
     wa: data.dukuh?.wa || '',
@@ -105,6 +106,7 @@ function InfoTab({ id, data, showToast }) {
         peta_url: form.peta_url,
         hero_foto: form.hero_foto
       });
+      await refreshData(true); // Silent refresh
       showToast('Info pedukuhan berhasil disimpan ke Google Sheets!');
     } catch (e) {
       showToast('Gagal menyimpan info!', 'error');
@@ -126,6 +128,7 @@ function InfoTab({ id, data, showToast }) {
 
 /* ========== STATISTIK TAB ========== */
 function StatistikTab({ id, data, showToast }) {
+  const { refreshData } = useSiteData();
   const [form, setForm] = useState({
     jml_rt: data.statistik?.jml_rt || 0,
     jml_kk: data.statistik?.jml_kk || 0,
@@ -144,6 +147,7 @@ function StatistikTab({ id, data, showToast }) {
         laki_laki: form.laki_laki,
         perempuan: form.perempuan
       });
+      await refreshData(true); // Silent refresh
       showToast('Statistik berhasil disimpan ke Google Sheets!');
     } catch (e) {
       showToast('Gagal menyimpan statistik!', 'error');
@@ -170,6 +174,7 @@ function StatistikTab({ id, data, showToast }) {
 
 /* ========== UMKM TAB ========== */
 function UMKMTab({ id, data, showToast }) {
+  const { refreshData } = useSiteData();
   const [items, setItems] = useState(data.umkm || []);
   const [editing, setEditing] = useState(null); // index or 'new'
   const [form, setForm] = useState({ nama: '', kategori: '', deskripsi: '', foto: '', wa: '', lokasi: '' });
@@ -193,6 +198,7 @@ function UMKMTab({ id, data, showToast }) {
           Lokasi: form.lokasi
         });
         setItems([...items, form]);
+        await refreshData(true); // Silent refresh
         showToast('UMKM berhasil ditambahkan ke Google Sheets!');
       } else {
         await updateSheetData('editUMKM', {
@@ -210,6 +216,7 @@ function UMKMTab({ id, data, showToast }) {
         const newList = [...items];
         newList[editing] = form;
         setItems(newList);
+        await refreshData(true); // Silent refresh
         showToast('UMKM berhasil diperbarui!');
       }
       setEditing(null);
@@ -228,6 +235,7 @@ function UMKMTab({ id, data, showToast }) {
         nama_usaha: items[i].nama
       });
       setItems(items.filter((_, idx) => idx !== i));
+      await refreshData(true); // Silent refresh
       showToast('UMKM berhasil dihapus.');
     } catch(e) {
       showToast('Gagal menghapus UMKM!', 'error');
@@ -288,6 +296,7 @@ function UMKMTab({ id, data, showToast }) {
 
 /* ========== GALERI TAB ========== */
 function GaleriTab({ id, data, showToast }) {
+  const { refreshData } = useSiteData();
   const [items, setItems] = useState(data.galeri || []);
   const [editing, setEditing] = useState(null);
   const [form, setForm] = useState({ judul: '', kategori: '', foto: '', deskripsi: '' });
@@ -309,6 +318,7 @@ function GaleriTab({ id, data, showToast }) {
           Deskripsi: form.deskripsi
         });
         setItems([...items, form]);
+        await refreshData(true); // Silent refresh
         showToast('Foto galeri berhasil ditambahkan!');
       } else {
         await updateSheetData('editGaleri', {
@@ -324,6 +334,7 @@ function GaleriTab({ id, data, showToast }) {
         const newList = [...items];
         newList[editing] = form;
         setItems(newList);
+        await refreshData(true); // Silent refresh
         showToast('Galeri berhasil diperbarui!');
       }
       setEditing(null);
@@ -342,6 +353,7 @@ function GaleriTab({ id, data, showToast }) {
         judul: items[i].judul
       });
       setItems(items.filter((_, idx) => idx !== i));
+      await refreshData(true); // Silent refresh
       showToast('Foto galeri dihapus.');
     } catch(e) {
       showToast(`Gagal menghapus Galeri! ${e.message}`, 'error');

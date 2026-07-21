@@ -90,14 +90,14 @@ export const fetchSheetData = async (sheetName) => {
     return [];
   }
 
-  const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv&gid=${gid}`;
+  // Tambahkan timestamp untuk mencegah caching oleh CDN Google
+  const url = `https://docs.google.com/spreadsheets/d/${SPREADSHEET_ID}/export?format=csv&gid=${gid}&t=${Date.now()}`;
 
   try {
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error(`Gagal mengambil data dari tab ${sheetName} (HTTP ${response.status})`);
     }
-
     const csvText = await response.text();
     return parseCSV(csvText);
   } catch (error) {

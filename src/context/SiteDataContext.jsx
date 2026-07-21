@@ -16,41 +16,41 @@ export function SiteDataProvider({ children }) {
   const [error, setError] = useState(null);
   const [isUsingFallback, setIsUsingFallback] = useState(false);
 
-  useEffect(() => {
-    const loadAllData = async () => {
-      setLoading(true);
-      try {
-        // Fetch semua sheet secara paralel agar lebih cepat
-        const [infoRes, statistikRes, umkmRes, galeriRes] = await Promise.all([
-          fetchSheetData('Pedukuhan_Info'),
-          fetchSheetData('Statistik'),
-          fetchSheetData('UMKM'),
-          fetchSheetData('Galeri')
-        ]);
+  const loadAllData = async (silent = false) => {
+    if (!silent) setLoading(true);
+    try {
+      // Fetch semua sheet secara paralel agar lebih cepat
+      const [infoRes, statistikRes, umkmRes, galeriRes] = await Promise.all([
+        fetchSheetData('Pedukuhan_Info'),
+        fetchSheetData('Statistik'),
+        fetchSheetData('UMKM'),
+        fetchSheetData('Galeri')
+      ]);
 
-        // Cek apakah data berhasil diambil (minimal info harus ada)
-        if (infoRes.length > 0) {
-          setData({
-            info: infoRes,
-            statistik: statistikRes,
-            umkm: umkmRes,
-            galeri: galeriRes
-          });
-          setIsUsingFallback(false);
-        } else {
-          // Jika semua kosong, gunakan fallback
-          console.warn("Data dari Google Sheets kosong, menggunakan data statis.");
-          setIsUsingFallback(true);
-        }
-      } catch (err) {
-        console.error("Gagal memuat data dari Google Sheets:", err);
-        setError(err.message);
-        setIsUsingFallback(true); // Gunakan data statis jika fetch gagal
-      } finally {
-        setLoading(false);
+      // Cek apakah data berhasil diambil (minimal info harus ada)
+      if (infoRes.length > 0) {
+        setData({
+          info: infoRes,
+          statistik: statistikRes,
+          umkm: umkmRes,
+          galeri: galeriRes
+        });
+        setIsUsingFallback(false);
+      } else {
+        // Jika semua kosong, gunakan fallback
+        console.warn("Data dari Google Sheets kosong, menggunakan data statis.");
+        setIsUsingFallback(true);
       }
-    };
+    } catch (err) {
+      console.error("Gagal memuat data dari Google Sheets:", err);
+      setError(err.message);
+      setIsUsingFallback(true); // Gunakan data statis jika fetch gagal
+    } finally {
+      if (!silent) setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     loadAllData();
   }, []);
 
@@ -104,7 +104,7 @@ export function SiteDataProvider({ children }) {
   };
 
   return (
-    <SiteDataContext.Provider value={{ data, loading, error, isUsingFallback, getPedukuhanData }}>
+    <SiteDataContext.Provider value={{ data, loading, error, isUsingFallback, getPedukuhanData, refreshData: (silent) => loadAllData(silent) }}>
       {children}
     </SiteDataContext.Provider>
   );
