@@ -1,24 +1,35 @@
 import { Link } from 'react-router-dom';
 import { getSession, hasAccessToDusun } from './adminAuth';
-import { pedukuhanList, pedukuhanData } from '../data/siteData';
+import { pedukuhanList } from '../data/siteData';
+import { useSiteData } from '../context/SiteDataContext';
 
 export default function AdminDashboard() {
   const session = getSession();
+  const { loading, getPedukuhanData } = useSiteData();
 
   // Filter pedukuhan yang bisa diakses
   const accessiblePedukuhan = pedukuhanList.filter((p) =>
     hasAccessToDusun(session, p.id)
   );
 
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 text-gray-500 animate-pulse">
+        <div className="w-10 h-10 border-4 border-leaf-500 border-t-transparent rounded-full animate-spin mb-4" />
+        <p className="text-sm font-medium">Memuat data dari Google Sheets...</p>
+      </div>
+    );
+  }
+
   // Hitung statistik total
   const totalStats = accessiblePedukuhan.reduce(
     (acc, p) => {
-      const d = pedukuhanData[p.id];
+      const d = getPedukuhanData(p.id);
       if (d) {
-        acc.kk += d.statistik.jml_kk;
-        acc.penduduk += d.statistik.laki_laki + d.statistik.perempuan;
-        acc.umkm += d.umkm.length;
-        acc.galeri += d.galeri.length;
+        acc.kk += d.statistik.jml_kk || 0;
+        acc.penduduk += (d.statistik.laki_laki || 0) + (d.statistik.perempuan || 0);
+        acc.umkm += d.umkm?.length || 0;
+        acc.galeri += d.galeri?.length || 0;
       }
       return acc;
     },
@@ -117,7 +128,7 @@ export default function AdminDashboard() {
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {accessiblePedukuhan.map((p) => {
-            const d = pedukuhanData[p.id];
+            const d = getPedukuhanData(p.id);
             return (
               <Link
                 key={p.id}
