@@ -18,7 +18,7 @@ export const desaInfo = {
   ],
   pemerintahan: {
     lurah: "Bapak Dani Pristiawan, S.P., M.I.P.",
-    carik: "Bapak/Ibu Carik Salamrejo",
+    carik: "Ibu Wulan Rahmawati, S.IP.",
   },
 };
 
