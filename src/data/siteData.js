@@ -40,7 +40,7 @@ export const pedukuhanList = [
   {
     id: "giyoso",
     nama: "Giyoso",
-    deskripsi: "Pedukuhan dengan pemandangan alam yang indah dan potensi wisata yang sedang berkembang.",
+    deskripsi: "Pedukuhan dengan potensi unggulan di bidang kerajinan serat alam dan kesenian tradisional.",
     warna: "from-green-500 to-teal-700",
     icon: "🌿",
   },
